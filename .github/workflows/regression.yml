@@ -2,9 +2,9 @@ name: SauceDemo Regression Suite
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
     inputs:
       test_target:
@@ -28,10 +28,9 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          python -m pip install -r requirements.txt
 
-
-	- name: Set up Chrome for Testing
+      - name: Set up Chrome for Testing
         id: setup-chrome
         uses: browser-actions/setup-chrome@v2
         with:
@@ -45,10 +44,10 @@ jobs:
         run: |
           if [ -n "$TEST_TARGET" ]; then
             echo "Running selected test: $TEST_TARGET"
-            pytest "$TEST_TARGET"
+            python -m pytest "$TEST_TARGET"
           else
             echo "Running smoke + negative tests"
-            pytest -m "smoke or negative" --maxfail=1
+            python -m pytest -m "smoke or negative"
           fi
 
       - name: Upload HTML report
