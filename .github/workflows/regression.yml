@@ -30,9 +30,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Set up Chrome for Testing
-        uses: browser-actions/setup-chrome@v1
+
+	- name: Set up Chrome for Testing
         id: setup-chrome
+        uses: browser-actions/setup-chrome@v2
+        with:
+          chrome-version: stable
+          install-chromedriver: true
 
       - name: Run tests
         env:
