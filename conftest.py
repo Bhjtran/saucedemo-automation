@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 from pathlib import Path
 import pytest
@@ -8,10 +9,23 @@ from selenium.webdriver.chrome.options import Options
 @pytest.fixture
 def driver(request):
     options = Options()
-    # Bỏ comment dòng dưới nếu muốn chạy không mở trình duyệt:
-    # options.add_argument("--headless=new")
-    options.add_argument("--start-maximized")
+
+    # Tự động chạy headless khi ở CI (GitHub Actions set biến CI=true),
+    # hoặc khi người dùng chủ động set HEADLESS=1 ở máy local.
+    if os.environ.get("CI") or os.environ.get("HEADLESS") == "1":
+        options.add_argument("--headless=new")
+        options.add_argument("--window-size=1920,1080")
+    else:
+        options.add_argument("--start-maximized")
+
+    # GitHub Actions cài Chrome riêng và đưa đường dẫn qua biến CHROME_BIN.
+    chrome_bin = os.environ.get("CHROME_BIN")
+    if chrome_bin:
+        options.binary_location = chrome_bin
+
     options.add_argument("--disable-notifications")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
 
     browser = webdriver.Chrome(options=options)
     browser.implicitly_wait(0)

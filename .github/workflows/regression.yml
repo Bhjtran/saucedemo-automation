@@ -1,0 +1,66 @@
+name: SauceDemo Regression Suite
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      test_target:
+        description: "Test to run (e.g. tests/test_login.py or tests/test_cart.py::test_add_product_to_cart). Leave empty for smoke + negative."
+        required: false
+        default: ""
+
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: Set up Chrome for Testing
+        id: setup-chrome
+        uses: browser-actions/setup-chrome@v2
+        with:
+          chrome-version: stable
+          install-chromedriver: true
+
+      - name: Run tests
+        env:
+          CHROME_BIN: ${{ steps.setup-chrome.outputs.chrome-path }}
+          TEST_TARGET: ${{ github.event.inputs.test_target }}
+        run: |
+          if [ -n "$TEST_TARGET" ]; then
+            echo "Running selected test: $TEST_TARGET"
+            python -m pytest "$TEST_TARGET"
+          else
+            echo "Running smoke + negative tests"
+            python -m pytest -m "smoke or negative"
+          fi
+
+      - name: Upload HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-html-report
+          path: reports/report.html
+
+      - name: Upload failure screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: failure-screenshots
+          path: screenshots/FAILED_*.png
+          if-no-files-found: ignore
