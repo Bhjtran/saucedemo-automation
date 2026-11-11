@@ -12,6 +12,7 @@ def test_sort_price_low_to_high(driver):
     inventory.sort_by("lohi")
 
     prices = inventory.get_prices()
+    assert prices, "No prices found on the page"
     assert prices == sorted(prices)
 
 
@@ -24,4 +25,5 @@ def test_sort_name_z_to_a(driver):
     inventory.sort_by("za")
 
     names = inventory.get_product_names()
+    assert names, "No product names found on the page"
     assert names == sorted(names, reverse=True)
