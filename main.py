@@ -38,6 +38,7 @@ def run_demo():
         print("4. Thanh toán")
         cart.checkout()
         checkout.fill_customer_information("Pham", "Tran", "700000")
+        print(f"   Total: ${checkout.get_total()}")
         checkout.screenshot("04_checkout_overview.png")
         checkout.finish()
 
