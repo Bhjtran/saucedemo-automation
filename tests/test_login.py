@@ -20,6 +20,7 @@ def test_login_successfully(driver):
         ("", PASSWORD, "Username is required"),
         (STANDARD_USER, "", "Password is required"),
     ],
+    ids=["wrong_password", "empty_username", "empty_password"],
 )
 def test_login_with_invalid_data(driver, username, password, expected_text):
     page = LoginPage(driver)
