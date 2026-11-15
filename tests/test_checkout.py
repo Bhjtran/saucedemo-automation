@@ -20,7 +20,11 @@ def test_complete_checkout(driver):
     cart.checkout()
 
     checkout.fill_customer_information("Pham", "Tran", "700000")
-    assert "Total:" in checkout.get_total()
+
+    # Item total = tổng giá sản phẩm; Total = Item total + Tax (làm tròn 2 số lẻ).
+    item_total = checkout.get_item_total()
+    assert item_total == round(sum(checkout.get_item_prices()), 2)
+    assert checkout.get_total() == round(item_total + checkout.get_tax(), 2)
 
     checkout.finish()
     assert checkout.get_complete_message() == "Thank you for your order!"
