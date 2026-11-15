@@ -43,7 +43,7 @@ class InventoryPage(BasePage):
         self.wait.until(lambda _driver: self.get_cart_count() == max(0, before - 1))
 
     def open_cart(self):
-        self.click(self.CART_LINK)
+        self.find_clickable(self.CART_LINK).click()
         self.wait.until(EC.visibility_of_element_located(self.CART_TITLE))
 
     def sort_by(self, value):

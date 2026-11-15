@@ -20,7 +20,7 @@ class CartPage(BasePage):
         self.wait.until(lambda _driver: len(self.get_product_names()) < before)
 
     def checkout(self):
-        self.click(self.CHECKOUT_BUTTON)
+        self.find_clickable(self.CHECKOUT_BUTTON).click()
         self.find_visible(self.FIRST_NAME_INPUT)
 
     def continue_shopping(self):
