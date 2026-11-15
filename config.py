@@ -1,4 +1,4 @@
 BASE_URL = "https://www.saucedemo.com/"
 STANDARD_USER = "standard_user"
 PASSWORD = "secret_sauce"
-DEFAULT_TIMEOUT = 10
+DEFAULT_TIMEOUT = 15
