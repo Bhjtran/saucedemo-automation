@@ -57,8 +57,7 @@ class CheckoutPage(BasePage):
         self._set_input(self.LAST_NAME, last_name)
         self._set_input(self.POSTAL_CODE, postal_code)
 
-        button = self.find_clickable(self.CONTINUE_BUTTON)
-        button.send_keys(Keys.ENTER)
+        self.click(self.CONTINUE_BUTTON)
 
 
     def get_error_message(self):
