@@ -26,6 +26,15 @@ def driver(request):
     options.add_argument("--disable-notifications")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
+    
+    # Tắt trình quản lý mật khẩu và cảnh báo "Change your password" của Chrome.
+    # Popup này chặn các cú click sau khi đăng nhập bằng secret_sauce.
+    options.add_experimental_option("prefs", {
+        "credentials_enable_service": False,
+        "profile.password_manager_enabled": False,
+        "profile.password_manager_leak_detection": False,
+    })
+    options.add_argument("--disable-features=PasswordLeakDetection")
 
     browser = webdriver.Chrome(options=options)
     browser.implicitly_wait(0)
